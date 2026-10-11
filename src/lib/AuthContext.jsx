@@ -21,11 +21,23 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
-      
+
+      // When no Base44 backend is configured (UI-only dev mode), skip the
+      // SDK calls that would 404 and use a mock user so the frontend pages
+      // are viewable without authentication.
+      if (!appParams.appBaseUrl) {
+        setUser({ id: 'dev-user', name: 'YGuard Admin', email: 'admin@yguard.local' });
+        setIsAuthenticated(true);
+        setAuthChecked(true);
+        setIsLoadingAuth(false);
+        setIsLoadingPublicSettings(false);
+        return;
+      }
+
       try {
         const publicSettings = await base44.app.getPublicSettings();
         setAppPublicSettings(publicSettings);
-        
+
         // If we got the app public settings successfully, check if user is authenticated
         if (appParams.token) {
           await checkUserAuth();
@@ -37,17 +49,6 @@ export const AuthProvider = ({ children }) => {
         setIsLoadingPublicSettings(false);
       } catch (appError) {
         console.error('App state check failed:', appError);
-
-        // When no Base44 backend is configured (UI-only dev mode), use a mock user
-        // so the frontend pages are viewable without authentication.
-        if (!appParams.appBaseUrl) {
-          setUser({ id: 'dev-user', name: 'YGuard Admin', email: 'admin@yguard.local' });
-          setIsAuthenticated(true);
-          setAuthChecked(true);
-          setIsLoadingAuth(false);
-          setIsLoadingPublicSettings(false);
-          return;
-        }
 
         // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {

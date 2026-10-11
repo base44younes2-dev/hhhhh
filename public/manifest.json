@@ -1,0 +1,12 @@
+{
+  "name": "YGuard — پایش و امنیت وردپرس",
+  "short_name": "YGuard",
+  "description": "داشبورد حرفه‌ای مانیتورینگ و امنیت وردپرس YGuard",
+  "start_url": "/",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "fa",
+  "theme_color": "#0ea5e9",
+  "background_color": "#0f172a",
+  "icons": []
+}
