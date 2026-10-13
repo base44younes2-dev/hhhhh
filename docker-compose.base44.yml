@@ -7,6 +7,7 @@ services:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./styles.css:/usr/share/nginx/html/styles.css:ro
       - ./script.js:/usr/share/nginx/html/script.js:ro
+      - ./dist:/usr/share/nginx/html/dist:ro
     restart: on-failure
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/"]
